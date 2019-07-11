@@ -2,7 +2,7 @@ import numpy as np
 
 from model.args import get_args
 from data import load
-from model import linear_svc, logistic_regression
+from model import linear_svc, logistic_regression, decision_tree
 
 if __name__ == '__main__':
     args = get_args()
@@ -33,6 +33,8 @@ if __name__ == '__main__':
         model = logistic_regression
     elif args.model == 'LinearSVC':
         model = linear_svc
+    elif args.model == 'DecisionTree':
+        model = decision_tree
     else:
         raise Exception("Unsupported model")
 
