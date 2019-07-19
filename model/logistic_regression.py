@@ -25,6 +25,11 @@ def predict(classifier, vectorizer, predict_x):
     return classifier.predict(predict_x)
 
 
+def predict_probabilities(classifier, vectorizer, predict_x):
+    predict_x = vectorizer.transform(predict_x)
+    return classifier.predict_proba(predict_x)
+
+
 def evaluate(classifier, vectorizer, evaluate_x, evaluate_y):
     evaluate_x = vectorizer.transform(evaluate_x)
     predict_y = classifier.predict(evaluate_x)
