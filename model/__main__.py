@@ -2,7 +2,7 @@ import numpy as np
 
 from model.args import get_args
 from data import load
-from model import linear_svc, logistic_regression, decision_tree
+from model import linear_svc, logistic_regression, decision_tree, adaboost
 
 if __name__ == '__main__':
     args = get_args()
@@ -35,6 +35,8 @@ if __name__ == '__main__':
         model = linear_svc
     elif args.model == 'DecisionTree':
         model = decision_tree
+    elif args.model == 'AdaBoost':
+        model = adaboost
     else:
         raise Exception("Unsupported model")
 
