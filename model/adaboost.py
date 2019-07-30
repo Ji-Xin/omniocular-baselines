@@ -1,11 +1,9 @@
-import re
-
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 from sklearn.multiclass import OneVsRestClassifier
-import graphviz
 
 import util.preprocess
 
@@ -19,9 +17,12 @@ def train(train_x, train_y, single_label=True, random_state=37):
 
     train_x = vectorizer.fit_transform(train_x)
     if single_label:
-        classifier = DecisionTreeClassifier(criterion="entropy", random_state=random_state)
+        classifier = AdaBoostClassifier(
+            DecisionTreeClassifier(criterion="entropy"),
+            random_state=random_state,
+        )
     else:
-        classifier = OneVsRestClassifier(DecisionTreeClassifier(random_state=random_state))
+        classifier = OneVsRestClassifier(AdaBoostClassifier())
     classifier.fit(train_x, train_y)
     return classifier, vectorizer
 
@@ -49,11 +50,11 @@ def predict_probabilities(classifier, vectorizer, predict_x):
     return classifier.predict_proba(predict_x)
 
 
-def visualize(classifier, vectorizer):
-    feature_names = [x.replace('"', '\\"') for x in vectorizer.get_feature_names()]
-    dot_data = export_graphviz(classifier, out_file=None,
-                               feature_names=feature_names,
-                               filled=True, rounded=True,
-                               special_characters=False)
-    graph = graphviz.Source(dot_data)
-    graph.render("decision_tree")
+# def visualize(classifier, vectorizer):
+#     feature_names = [x.replace('"', '\\"') for x in vectorizer.get_feature_names()]
+#     dot_data = export_graphviz(classifier, out_file=None,
+#                                feature_names=feature_names,
+#                                filled=True, rounded=True,
+#                                special_characters=False)
+#     graph = graphviz.Source(dot_data)
+#     graph.render("decision_tree")
